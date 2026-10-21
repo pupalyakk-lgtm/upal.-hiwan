@@ -1,0 +1,786 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1715">
+  <title>UPAL HIWAN | Dunia Hewan 3D</title>
+
+  <style>
+    :root {
+      --bg: #0b1715;
+      --panel: #132420;
+      --green: #c4ff67;
+      --text: #f4f7f2;
+      --muted: #a7b9af;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    header {
+      padding: 18px 7%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: #0b1715ed;
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #ffffff15;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .logo span,
+    .tag {
+      color: var(--green);
+    }
+
+    nav {
+      display: flex;
+      gap: 22px;
+    }
+
+    nav a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    nav a:hover {
+      color: var(--green);
+    }
+
+    .hero {
+      padding: 75px 7%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+      background: radial-gradient(
+        ellipse at 80% 30%, #24422c 0, transparent 60%
+      );
+    }
+
+    .tag {
+      font-size: 12px;
+      letter-spacing: 3px;
+      font-weight: bold;
+    }
+
+    h1 {
+      font-size: clamp(42px, 6vw, 75px);
+      line-height: 1.05;
+      margin: 20px 0;
+    }
+
+    h1 span {
+      color: var(--green);
+    }
+
+    p {
+      line-height: 1.8;
+    }
+
+    .hero p,
+    .section-desc {
+      color: var(--muted);
+    }
+
+    .btn {
+      display: inline-block;
+      background: var(--green);
+      color: #122015;
+      padding: 14px 20px;
+      margin-top: 15px;
+      border-radius: 9px;
+      text-decoration: none;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+
+    .hero-image {
+      perspective: 1000px;
+      position: relative;
+    }
+
+    .hero-image img {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+      border-radius: 20px;
+      box-shadow: 20px 25px 60px #0008;
+      transform: rotateY(-7deg) rotateX(3deg);
+      transition: .4s;
+    }
+
+    .hero-image img:hover {
+      transform: rotateY(0) rotateX(0) scale(1.02);
+    }
+
+    .floating {
+      position: absolute;
+      bottom: 20px;
+      left: -12px;
+      background: #10231ddd;
+      border: 1px solid #c4ff6744;
+      padding: 15px;
+      border-radius: 12px;
+    }
+
+    section {
+      padding: 65px 7%;
+    }
+
+    .section-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      font-size: clamp(28px, 4vw, 40px);
+      margin: 12px 0;
+    }
+
+    .search {
+      width: 260px;
+      max-width: 100%;
+      padding: 13px 16px;
+      background: var(--panel);
+      color: white;
+      border: 1px solid #30433b;
+      border-radius: 10px;
+      outline: none;
+    }
+
+    .search:focus {
+      border-color: var(--green);
+    }
+
+    .filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .filter {
+      padding: 10px 16px;
+      border: 1px solid #34483e;
+      border-radius: 30px;
+      background: transparent;
+      color: white;
+      cursor: pointer;
+    }
+
+    .filter.active,
+    .filter:hover {
+      background: var(--green);
+      color: #142016;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid #ffffff12;
+      border-radius: 17px;
+      overflow: hidden;
+      transition: .3s;
+      transform-style: preserve-3d;
+    }
+
+    .card:hover {
+      transform: translateY(-8px) rotateX(2deg);
+      border-color: #c4ff6780;
+    }
+
+    .card img {
+      display: block;
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      transition: .4s;
+    }
+
+    .card:hover img {
+      transform: scale(1.05);
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    .card h3 {
+      font-size: 23px;
+      margin: 12px 0 8px;
+    }
+
+    .card p {
+      font-size: 14px;
+      color: var(--muted);
+      min-height: 76px;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 20px;
+      background: #273b30;
+      color: #d7f9bd;
+      font-size: 12px;
+      margin-bottom: 12px;
+    }
+
+    .details {
+      padding: 10px 13px;
+      border: 1px solid #536b5b;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--green);
+      cursor: pointer;
+    }
+
+    .details:hover {
+      background: #263c2d;
+    }
+
+    .empty {
+      color: var(--muted);
+    }
+
+    .about {
+      background: #10201b;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 35px;
+      align-items: center;
+    }
+
+    .about img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 18px;
+    }
+
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .fact {
+      padding: 18px 8px;
+      text-align: center;
+      background: #172d24;
+      border-radius: 12px;
+    }
+
+    .fact strong {
+      display: block;
+      color: var(--green);
+      font-size: 25px;
+    }
+
+    .fact span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    footer {
+      padding: 28px 7%;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    footer b {
+      color: var(--green);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      background: #000b;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--panel);
+      border: 1px solid #526c58;
+      border-radius: 18px;
+      max-width: 520px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-box img {
+      width: 100%;
+      height: 230px;
+      object-fit: cover;
+    }
+
+    .modal-content {
+      padding: 22px;
+    }
+
+    .close {
+      float: right;
+      padding: 9px 13px;
+      background: #2a4034;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 800px) {
+      .hero,
+      .about {
+        grid-template-columns: 1fr;
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .hero-image img {
+        height: 300px;
+      }
+
+      header,
+      section,
+      .hero,
+      footer {
+        padding-left: 5%;
+        padding-right: 5%;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section-top {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .search {
+        width: 100%;
+      }
+
+      nav {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      nav a {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">UPAL <span>HIWAN.</span></div>
+    <nav>
+      <a href="#home">Beranda</a>
+      <a href="#hewan">Hewan</a>
+      <a href="#tentang">Tentang</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div>
+        <div class="tag">DUNIA SATWA • 3D EXPLORER</div>
+        <h1>Jelajahi Dunia <span>Hewan.</span></h1>
+        <p>
+          Temukan keajaiban satwa di seluruh dunia.
+          Pelajari habitat, makanan, dan fakta menarik
+          hewan melalui UPAL HIWAN.
+        </p>
+        <a class="btn" href="#hewan">Mulai Menjelajah ↗</a>
+      </div>
+
+      <div class="hero-image">
+        <img
+          src="https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=1000&q=85"
+          alt="Harimau di alam liar"
+        >
+        <div class="floating">🐾 Kenali. Pelajari. Lindungi.</div>
+      </div>
+    </section>
+
+    <section id="hewan">
+      <div class="section-top">
+        <div>
+          <div class="tag">KOLEKSI SATWA</div>
+          <h2>Temukan Hewan Favoritmu</h2>
+          <p class="section-desc">
+            Kenali berbagai hewan dan fakta uniknya.
+            Pilih kartu untuk membaca informasi lengkap.
+          </p>
+        </div>
+
+        <input
+          class="search"
+          id="search"
+          type="search"
+          placeholder="🔍 Cari hewan..."
+          aria-label="Cari hewan"
+        >
+      </div>
+
+      <div class="filters" id="filters">
+        <button class="filter active" data-category="Semua">Semua</button>
+        <button class="filter" data-category="Mamalia">Mamalia</button>
+        <button class="filter" data-category="Reptil">Reptil</button>
+        <button class="filter" data-category="Burung">Burung</button>
+        <button class="filter" data-category="Laut">Hewan Laut</button>
+      </div>
+
+      <div class="grid" id="animalGrid"></div>
+      <p id="empty" class="empty" hidden>
+        Hewan tidak ditemukan. Coba kata kunci lain.
+      </p>
+    </section>
+
+    <section class="about" id="tentang">
+      <div>
+        <div class="tag">TENTANG KAMI</div>
+        <h2>Sayangi Hewan, Jaga Alam.</h2>
+        <p class="section-desc">
+          UPAL HIWAN adalah website edukasi untuk mengenal
+          dunia satwa dengan cara yang menyenangkan.
+          Mari belajar tentang habitat, makanan, dan keunikan
+          hewan serta pentingnya menjaga kelestarian alam.
+        </p>
+        <a class="btn" href="#hewan">Jelajahi Koleksi</a>
+      </div>
+
+      <div>
+        <img
+          src="https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=900&q=85"
+          alt="Satwa liar di habitat alami"
+        >
+
+        <div class="facts">
+          <div class="fact">
+            <strong>8</strong>
+            <span>Hewan</span>
+          </div>
+          <div class="fact">
+            <strong>4</strong>
+            <span>Kategori</span>
+          </div>
+          <div class="fact">
+            <strong>100%</strong>
+            <span>Edukasi</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div><b>UPAL HIWAN</b> — Dunia Hewan 3D</div>
+    <div>Belajar satwa, cintai alam. © <span id="year"></span></div>
+  </footer>
+
+  <div
+    class="modal"
+    id="modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalTitle"
+  >
+    <div class="modal-box">
+      <img id="modalImage" src="" alt="">
+
+      <div class="modal-content">
+        <button class="close" id="closeModal">✕ Tutup</button>
+        <div class="tag" id="modalCategory"></div>
+        <h2 id="modalTitle"></h2>
+        <p class="section-desc" id="modalDescription"></p>
+        <p><b>Habitat:</b> <span id="modalHabitat"></span></p>
+        <p><b>Makanan:</b> <span id="modalFood"></span></p>
+        <p><b>Fakta unik:</b> <span id="modalFact"></span></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const animals = [
+      {
+        name: "Harimau",
+        category: "Mamalia",
+        emoji: "🐯",
+        habitat: "Hutan dan padang rumput di Asia",
+        food: "Rusa dan hewan herbivora lainnya",
+        description:
+          "Harimau adalah kucing besar dengan belang unik. Hewan ini merupakan predator yang umumnya hidup menyendiri.",
+        fact:
+          "Pola belang setiap harimau berbeda, mirip seperti sidik jari.",
+        image: "photo-1561731216-c3a4d99437d5"
+      },
+      {
+        name: "Singa",
+        category: "Mamalia",
+        emoji: "🦁",
+        habitat: "Sabana dan padang rumput Afrika",
+        food: "Zebra, antelop, dan mamalia lain",
+        description:
+          "Singa adalah kucing besar yang hidup dalam kelompok. Singa jantan biasanya memiliki surai khas.",
+        fact:
+          "Singa adalah salah satu kucing besar yang hidup berkelompok.",
+        image: "photo-1546182990-dffeafbe841d"
+      },
+      {
+        name: "Gajah",
+        category: "Mamalia",
+        emoji: "🐘",
+        habitat: "Hutan dan sabana Afrika serta Asia",
+        food: "Rumput, daun, kulit kayu, dan buah",
+        description:
+          "Gajah merupakan mamalia darat besar yang memiliki belalai untuk mengambil makanan, minum, dan berkomunikasi.",
+        fact:
+          "Belalai gajah memiliki puluhan ribu unit otot.",
+        image: "photo-1557050543-4d5f4e07ef46"
+      },
+      {
+        name: "Panda",
+        category: "Mamalia",
+        emoji: "🐼",
+        habitat: "Hutan pegunungan di Tiongkok",
+        food: "Bambu",
+        description:
+          "Panda raksasa terkenal dengan bulu hitam-putihnya. Sebagian besar makanannya terdiri dari bambu.",
+        fact:
+          "Panda menghabiskan banyak waktu setiap hari untuk makan bambu.",
+        image: "photo-1564349683136-77e08dba1ef7"
+      },
+      {
+        name: "Elang",
+        category: "Burung",
+        emoji: "🦅",
+        habitat: "Pegunungan, hutan, dan wilayah terbuka",
+        food: "Ikan, mamalia kecil, dan burung lain",
+        description:
+          "Elang merupakan burung pemangsa dengan paruh melengkung dan cakar kuat untuk menangkap mangsa.",
+        fact:
+          "Banyak jenis elang memiliki penglihatan yang sangat tajam.",
+        image: "photo-1474511320723-9a56873867b5"
+      },
+      {
+        name: "Burung Beo",
+        category: "Burung",
+        emoji: "🦜",
+        habitat: "Hutan tropis",
+        food: "Buah, biji-bijian, dan kacang",
+        description:
+          "Burung beo dan kerabatnya dikenal karena warna bulunya serta kemampuan beberapa spesies menirukan suara.",
+        fact:
+          "Kemampuan menirukan suara berbeda-beda menurut spesies.",
+        image: "photo-1552728089-57bdde30beb3"
+      },
+      {
+        name: "Komodo",
+        category: "Reptil",
+        emoji: "🦎",
+        habitat: "Pulau-pulau tertentu di Nusa Tenggara Timur",
+        food: "Daging hewan",
+        description:
+          "Komodo adalah kadal terbesar yang masih hidup dan merupakan satwa asli Indonesia.",
+        fact:
+          "Komodo memiliki indra penciuman yang sangat baik.",
+        image: "photo-1535338454770-8be927b5a00b"
+      },
+      {
+        name: "Penyu",
+        category: "Laut",
+        emoji: "🐢",
+        habitat: "Laut tropis dan subtropis",
+        food: "Lamun, ubur-ubur, atau hewan kecil, tergantung spesies",
+        description:
+          "Penyu adalah reptil laut yang bernapas dengan paru-paru dan naik ke permukaan untuk mengambil udara.",
+        fact:
+          "Penyu betina naik ke pantai untuk bertelur.",
+        image: "photo-1437622368342-7a3d73a34c8f"
+      }
+    ];
+
+    const grid = document.getElementById("animalGrid");
+    const search = document.getElementById("search");
+    const empty = document.getElementById("empty");
+    const modal = document.getElementById("modal");
+
+    let category = "Semua";
+
+    function photo(id) {
+      return "https://images.unsplash.com/" + id +
+        "?auto=format&fit=crop&w=800&q=80";
+    }
+
+    function renderAnimals() {
+      const query = search.value.toLocaleLowerCase("id");
+
+      const filtered = animals.filter(animal => {
+        const matchesCategory =
+          category === "Semua" || animal.category === category;
+
+        const text = (
+          animal.name + " " +
+          animal.category + " " +
+          animal.habitat
+        ).toLocaleLowerCase("id");
+
+        return matchesCategory && text.includes(query);
+      });
+
+      grid.innerHTML = "";
+
+      filtered.forEach(animal => {
+        const card = document.createElement("article");
+        card.className = "card";
+
+        const img = document.createElement("img");
+        img.src = photo(animal.image);
+        img.alt = animal.name;
+        img.loading = "lazy";
+
+        const body = document.createElement("div");
+        body.className = "card-body";
+
+        const tag = document.createElement("div");
+        tag.className = "tag";
+        tag.textContent = animal.emoji + " " +
+          animal.category.toUpperCase();
+
+        const title = document.createElement("h3");
+        title.textContent = animal.name;
+
+        const desc = document.createElement("p");
+        desc.textContent = animal.description;
+
+        const pill = document.createElement("span");
+        pill.className = "pill";
+        pill.textContent = "🌿 " + animal.category;
+
+        const button = document.createElement("button");
+        button.className = "details";
+        button.textContent = "Lihat Detail ↗";
+        button.addEventListener("click", () => showDetail(animal));
+
+        body.append(tag, title, desc, pill, document.createElement("br"), button);
+        card.append(img, body);
+        grid.appendChild(card);
+      });
+
+      empty.hidden = filtered.length > 0;
+    }
+
+    function showDetail(animal) {
+      document.getElementById("modalImage").src = photo(animal.image);
+      document.getElementById("modalImage").alt = animal.name;
+      document.getElementById("modalCategory").textContent =
+        animal.emoji + " " + animal.category.toUpperCase();
+      document.getElementById("modalTitle").textContent = animal.name;
+      document.getElementById("modalDescription").textContent =
+        animal.description;
+      document.getElementById("modalHabitat").textContent =
+        animal.habitat;
+      document.getElementById("modalFood").textContent =
+        animal.food;
+      document.getElementById("modalFact").textContent =
+        animal.fact;
+
+      modal.classList.add("show");
+      document.getElementById("closeModal").focus();
+    }
+
+    search.addEventListener("input", renderAnimals);
+
+    document.getElementById("filters").addEventListener("click", event => {
+      const button = event.target.closest("button[data-category]");
+      if (!button) return;
+
+      category = button.dataset.category;
+
+      document.querySelectorAll(".filter").forEach(filter => {
+        filter.classList.toggle("active", filter === button);
+      });
+
+      renderAnimals();
+    });
+
+    function closeModal() {
+      modal.classList.remove("show");
+    }
+
+    document.getElementById("closeModal")
+      .addEventListener("click", closeModal);
+
+    modal.addEventListener("click", event => {
+      if (event.target === modal) closeModal();
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") closeModal();
+    });
+
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+
+    renderAnimals();
+  </script>
+
+</body>
+</html>
